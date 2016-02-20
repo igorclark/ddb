@@ -452,6 +452,7 @@ format_update_cond({'exists', Name, Value, Type}) ->
 
 -spec type(type()) -> binary().
 
+type('uuid') -> <<"S">>;
 type('string') -> <<"S">>;
 type('number') -> <<"N">>;
 type(['string']) -> <<"SS">>;
