@@ -57,7 +57,7 @@
 
 %%% Endpoint targets
 
--define(TG_VERSION, "DynamoDB_20111205.").
+-define(TG_VERSION, "DynamoDB_20120810.").
 -define(TG_CREATE_TABLE, ?TG_VERSION ++ "CreateTable").
 -define(TG_LIST_TABLES, ?TG_VERSION ++ "ListTables").
 -define(TG_DESCRIBE_TABLE, ?TG_VERSION ++ "DescribeTable").
@@ -485,6 +485,13 @@ request(Target, JSON) ->
             {ok, Key, Secret, Token} = ddb_iam:token(129600),
             ddb:credentials(Key, Secret, Token),
             request(Target, JSON);
+		{'error', 'incompatible_local_dynamo_version'} = Error ->
+			Msg = io_lib:format(
+				"~p doesn't work with DynamoDB Local",
+				[?MODULE]
+			),
+			lager:log(warning, [], Msg),
+			Error;
         Else ->
             Else
     end.
